@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ci-cd-demo
+  labels:
+    app: ci-cd-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ci-cd-demo
+  template:
+    metadata:
+      labels:
+        app: ci-cd-demo
+    spec:
+      containers:
+      - name: ci-cd-demo
+        image: serhatakca/ci-cd-demo:latest  # Docker hub’daki image’ını buraya yaz
+        ports:
+        - containerPort: 3333
+        envFrom:
+        - configMapRef:
+            name: ci-cd-demo-config  # ConfigMap kullanıyorsan böyle bağla, yoksa bu kısmı kaldırabilirsin
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+          requests:
+            memory: "128Mi"
+            cpu: "250m"
